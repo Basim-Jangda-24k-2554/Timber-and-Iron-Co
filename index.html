@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timber & Iron Craft Co. — Custom Hardwood Furniture, Austin TX</title>
+  <link rel="stylesheet" href="css/timber.css">
+  <style>
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: var(--nav-height);
+      background: var(--charcoal);
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(30,63,32,0.3) 0%, rgba(34,34,34,0.8) 50%, rgba(34,34,34,0.95) 100%),
+        linear-gradient(0deg, var(--charcoal) 0%, transparent 40%);
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: overlay;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      padding: 120px 24px 80px;
+    }
+
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1.06;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.75);
+      font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-kicker {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .trust-triad {
+      background: var(--surface);
+    }
+
+    .trust-card {
+      text-align: center;
+      padding: 40px 28px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .trust-card .icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .trust-card .icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .trust-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+    }
+
+    .trust-card p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .category-grid .grid-3 {
+      gap: 24px;
+    }
+
+    .category-card {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .category-card:hover {
+      border-color: var(--accent);
+    }
+
+    .category-card-bg {
+      width: 100%;
+      height: 100%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease;
+    }
+
+    .category-card:hover .category-card-bg {
+      transform: scale(1.03);
+    }
+
+    .category-card .placeholder-slab {
+      width: 70%;
+      height: 60%;
+      background: linear-gradient(135deg, #d4c9b8 0%, #b8a88e 50%, #9c8a6e 100%);
+      border-radius: 2px;
+    }
+
+    .category-card.dining .placeholder-slab {
+      width: 80%;
+      height: 50%;
+      background: linear-gradient(135deg, #c4b6a0 0%, #a89476 50%, #8a7658 100%);
+    }
+
+    .category-card.coffee .placeholder-slab {
+      width: 60%;
+      height: 40%;
+      background: linear-gradient(135deg, #d1c4b0 0%, #b8a88e 50%, #9c8a6e 100%);
+    }
+
+    .category-card.shelves .placeholder-slab {
+      width: 50%;
+      height: 65%;
+      background: linear-gradient(135deg, #cebfa8 0%, #b0a088 50%, #8a7a62 100%);
+    }
+
+    .category-card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px;
+      background: linear-gradient(transparent, rgba(34,34,34,0.85));
+      color: #fff;
+    }
+
+    .category-card-label h3 {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .category-card-label p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .social-proof {
+      background: var(--surface);
+    }
+
+    .review-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 32px;
+    }
+
+    .review-card .stars {
+      color: #d4a545;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .review-card blockquote {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: var(--fg);
+    }
+
+    .review-card .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .review-card .reviewer-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--muted);
+    }
+
+    .review-card .reviewer-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .review-card .reviewer-location {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .cta-band {
+      background: var(--charcoal);
+      text-align: center;
+      padding: 5rem 0;
+    }
+
+    .cta-band h2 {
+      color: #fff;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 1rem;
+    }
+
+    .cta-band p {
+      color: rgba(255,255,255,0.65);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="/" class="nav-logo">Timber <span>&amp;</span> Iron</a>
+      <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="configurator.html">Configurator</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="b2b-quote.html">B2B Quote</a></li>
+        <li><a href="configurator.html" class="nav-cta">Design Your Table</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-bg"> <img src="Gemini_Generated_Image_15kgkk15kgkk15kg.png" alt="bg"></div>
+    </div>
+    <div class="container" style="position:relative;z-index:2;">
+      <div class="hero-content">
+        <span class="hero-kicker">Austin, Texas — Since 2014</span>
+        <h1>Heirloom-Quality Custom Hardwood Furniture. Built in Austin—Shipped Nationwide.</h1>
+        <p>Every piece is handcrafted from hand-selected timber and welded industrial steel. Your dimensions, your wood, your finish — delivered to your door.</p>
+        <div class="hero-actions">
+          <a href="configurator.html" class="btn btn-primary">Design Your Table</a>
+          <a href="portfolio.html" class="btn btn-outline-light">View Portfolio</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trust-triad">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">The Timber &amp; Iron Difference</h2>
+        <p class="section-subtitle" style="margin:0 auto;">Three promises that define everything we build.</p>
+      </div>
+      <div class="grid-3">
+        <div class="trust-card">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M9 21h6"/><path d="M7 7l-2 2 2 2"/><path d="M17 7l2 2-2 2"/></svg>
+          </div>
+          <h3>Hand-Selected Timber</h3>
+          <p>Choose your exact wood slab — walnut, white oak, or reclaimed pine. We photograph every board so you see exactly what you're getting before we cut.</p>
+        </div>
+        <div class="trust-card">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Lifetime Warranty</h3>
+          <p>All industrial steel joinery carries a lifetime structural warranty. Our welds are tested to exceed commercial-grade standards — this furniture is built for generations.</p>
+        </div>
+        <div class="trust-card">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Flexible Delivery</h3>
+          <p>Local Austin clients get white-glove setup and placement. Nationwide, every crate is built in our shop, insured, and shipped with real-time tracking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Our Collections</h2>
+        <p class="section-subtitle" style="margin:0 auto;">Explore our most-requested furniture lines — each fully customizable.</p>
+      </div>
+      <div class="category-grid grid-3">
+        <a href="configurator.html" class="category-card dining">
+          <div class="category-card-bg">
+            <div class="placeholder-slab"></div>
+          </div>
+          <div class="category-card-label">
+            <h3>Dining Tables</h3>
+            <p>Seat 4 to 12 · Walnut, Oak, Reclaimed Pine</p>
+          </div>
+        </a>
+        <a href="configurator.html" class="category-card coffee">
+          <div class="category-card-bg">
+            <div class="placeholder-slab"></div>
+          </div>
+          <div class="category-card-label">
+            <h3>Coffee Tables</h3>
+            <p>Rectangular, Round, Live-Edge · Steel or Tapered Legs</p>
+          </div>
+        </a>
+        <a href="configurator.html" class="category-card shelves">
+          <div class="category-card-bg">
+            <div class="placeholder-slab"></div>
+          </div>
+          <div class="category-card-label">
+            <h3>Floating Shelves</h3>
+            <p>Single, Double, Corner · Hidden Bracket or Exposed Pipe</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section social-proof">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <p class="section-subtitle" style="margin:0 auto;">Real reviews from homeowners and designers across the country.</p>
+      </div>
+      <div class="grid-3">
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"The walnut dining table is the centerpiece of our home. Every guest asks where we got it. The team walked us through wood selection via video — we felt like we were in the shop."</blockquote>
+          <div class="reviewer">
+            <div class="reviewer-avatar">C</div>
+            <div>
+              <div class="reviewer-name">Catherine R.</div>
+              <div class="reviewer-location">Austin, TX</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"We specified our own dimensions and steel finish for the commercial order. The team sent CAD confirmations, progress photos, and delivered two weeks ahead of schedule."</blockquote>
+          <div class="reviewer">
+            <div class="reviewer-avatar">M</div>
+            <div>
+              <div class="reviewer-name">Marcus L.</div>
+              <div class="reviewer-location">Interior Designer, NYC</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"Three years in and our coffee table looks better than the day it arrived. The patina on the steel base is gorgeous. This is the kind of furniture you hand down to your kids."</blockquote>
+          <div class="reviewer">
+            <div class="reviewer-avatar">S</div>
+            <div>
+              <div class="reviewer-name">Sarah &amp; Tom K.</div>
+              <div class="reviewer-location">Portland, OR</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container">
+      <h2>Ready to Build Something Extraordinary?</h2>
+      <p>Start with our configurator to choose your wood, dimensions, and steel base — then we'll craft a formal quote within 48 hours.</p>
+      <a href="configurator.html" class="btn btn-primary">Design Your Table</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>
+        <div class="footer-brand">Timber <span>&amp;</span> Iron</div>
+        <p>Custom hardwood and steel furniture handcrafted in Austin, Texas. Every piece is built to order — designed to outlast its first owner.</p>
+      </div>
+      <div>
+        <h4>Collections</h4>
+        <ul>
+          <li><a href="configurator.html">Dining Tables</a></li>
+          <li><a href="configurator.html">Coffee Tables</a></li>
+          <li><a href="configurator.html">Floating Shelves</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="configurator.html">Custom Quote</a></li>
+          <li><a href="b2b-quote.html">B2B Orders</a></li>
+          <li><a href="#">White-Glove Delivery</a></li>
+          <li><a href="#">Nationwide Shipping</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>1600 E 4th St, Austin, TX 78702</p>
+        <p>(512) 555-0174</p>
+        <p>hello@timberandironcraft.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2026 Timber & Iron Craft Co. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

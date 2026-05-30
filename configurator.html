@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Table Configurator — Timber & Iron Craft Co.</title>
+  <link rel="stylesheet" href="css/timber.css">
+  <style>
+    .config-page {
+      padding-top: calc(var(--nav-height) + 32px);
+      min-height: 100vh;
+    }
+
+    .config-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: calc(100vh - var(--nav-height) - 32px);
+    }
+
+    /* ===== Gallery Panel ===== */
+    .config-gallery {
+      position: sticky;
+      top: var(--nav-height);
+      height: calc(100vh - var(--nav-height));
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-right: 1px solid var(--border);
+    }
+
+    .config-gallery .preview-slab {
+      width: 80%;
+      max-width: 500px;
+      aspect-ratio: 4/3;
+      background: linear-gradient(145deg, #d4c9b8 0%, #b8a88e 50%, #9c8a6e 100%);
+      border-radius: 2px;
+      transition: all 0.5s ease;
+      margin-bottom: 24px;
+    }
+
+    .config-gallery .preview-slab.walnut {
+      background: linear-gradient(145deg, #5c4033 0%, #4a3328 50%, #3d2b1f 100%);
+    }
+
+    .config-gallery .preview-slab.white-oak {
+      background: linear-gradient(145deg, #d4c9b8 0%, #c4b6a0 50%, #b8a88e 100%);
+    }
+
+    .config-gallery .preview-slab.reclaimed-pine {
+      background: linear-gradient(145deg, #c4a882 0%, #b8946a 50%, #a88058 100%);
+    }
+
+    .config-gallery .preview-slab.x-frame {
+      box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--muted);
+    }
+
+    .config-gallery .preview-slab.u-shape {
+      box-shadow: 0 -8px 0 0 rgba(34,34,34,0.15), 0 8px 0 0 rgba(34,34,34,0.15);
+    }
+
+    .config-gallery .preview-slab.pedestal {
+      box-shadow: 0 0 0 0 transparent;
+    }
+
+    .config-gallery .preview-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .config-gallery .preview-label strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--fg);
+      margin-bottom: 4px;
+    }
+
+    /* ===== Configurator Panel ===== */
+    .config-panel {
+      padding: 48px 48px 120px;
+      max-width: 540px;
+    }
+
+    .config-panel h1 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .config-panel > p {
+      color: var(--muted);
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+    }
+
+    .config-step {
+      margin-bottom: 2.5rem;
+    }
+
+    .config-step .step-num {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .config-step .step-label {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+    }
+
+    .config-step .option-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .config-step .option-grid.two-col {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .option-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 12px;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--fg);
+      text-align: center;
+      min-height: 72px;
+    }
+
+    .option-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .option-btn.selected {
+      border-color: var(--accent);
+      background: rgba(30, 63, 32, 0.04);
+    }
+
+    .option-btn .price-add {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    /* ===== Dimension slider ===== */
+    .dimension-slider {
+      margin-top: 1rem;
+    }
+
+    .dimension-slider .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .dimension-slider .slider-header label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .dimension-slider .slider-value {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .dimension-slider input[type="range"] {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .dimension-slider input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .dimension-slider input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .dimension-slider .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ===== Price Display ===== */
+    .price-estimate {
+      margin-top: 2rem;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .price-estimate .price-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .price-estimate .price-amount {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .price-estimate .price-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .config-panel .btn {
+      width: 100%;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 900px) {
+      .config-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .config-gallery {
+        position: relative;
+        top: 0;
+        height: 320px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .config-gallery .preview-slab {
+        width: 60%;
+        max-width: 300px;
+      }
+
+      .config-panel {
+        padding: 32px 24px 80px;
+      }
+
+      .config-step .option-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <a href="/" class="nav-logo">Timber <span>&amp;</span> Iron</a>
+      <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="configurator.html" class="active">Configurator</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="b2b-quote.html">B2B Quote</a></li>
+        <li><a href="configurator.html" class="nav-cta">Design Your Table</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="config-page">
+    <div class="config-layout">
+      <!-- Gallery -->
+      <div class="config-gallery">
+        <div class="preview-slab walnut x-frame" id="previewSlab"></div>
+        <div class="preview-label">
+          <strong id="galleryMaterial">Walnut</strong>
+          <span id="galleryBase">X-Frame Steel Base</span> · <span id="galleryLength">72″</span>
+        </div>
+      </div>
+
+      <!-- Configurator -->
+      <div class="config-panel">
+        <h1>Design Your Table</h1>
+        <p>Select your material, size, and base. Your baseline estimate updates in real time below.</p>
+
+        <!-- Step 1: Material -->
+        <div class="config-step">
+          <span class="step-num">Step 1 of 3</span>
+          <div class="step-label">Choose your wood</div>
+          <div class="option-grid">
+            <button class="option-btn selected" data-material="walnut" data-price="1200">
+              Walnut
+              <span class="price-add">$1,200 base</span>
+            </button>
+            <button class="option-btn" data-material="white-oak" data-price="800">
+              White Oak
+              <span class="price-add">$800 base</span>
+            </button>
+            <button class="option-btn" data-material="reclaimed-pine" data-price="600">
+              Reclaimed Pine
+              <span class="price-add">$600 base</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Dimensions -->
+        <div class="config-step">
+          <span class="step-num">Step 2 of 3</span>
+          <div class="step-label">Set the length</div>
+          <div class="dimension-slider">
+            <div class="slider-header">
+              <label>Table length</label>
+              <span class="slider-value" id="lengthValue">72″</span>
+            </div>
+            <input type="range" id="lengthSlider" min="60" max="120" value="72" step="1">
+            <div class="slider-labels">
+              <span>5′ (60″)</span>
+              <span>10′ (120″)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Base -->
+        <div class="config-step">
+          <span class="step-num">Step 3 of 3</span>
+          <div class="step-label">Select steel base style</div>
+          <div class="option-grid two-col">
+            <button class="option-btn selected" data-base="x-frame" data-price="400">
+              X-Frame
+              <span class="price-add">+$400</span>
+            </button>
+            <button class="option-btn" data-base="u-shape" data-price="600">
+              U-Shape
+              <span class="price-add">+$600</span>
+            </button>
+            <button class="option-btn" data-base="pedestal" data-price="800">
+              Industrial Pedestal
+              <span class="price-add">+$800</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div class="price-estimate">
+          <div class="price-label">Estimated baseline price</div>
+          <div class="price-amount" id="priceDisplay">$1,856</div>
+          <div class="price-note">This is a baseline estimate. Final pricing confirmed via formal consultation after you submit your request.</div>
+        </div>
+
+        <button class="btn btn-primary" onclick="submitConfig()">Request Formal Quote</button>
+        <p style="font-size:0.8rem;color:var(--muted);margin-top:10px;text-align:center;">Submit your selections — we'll respond within 48 hours with a detailed quote, lead time, and shipping options.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div>
+        <div class="footer-brand">Timber <span>&amp;</span> Iron</div>
+        <p>Custom hardwood and steel furniture handcrafted in Austin, Texas. Every piece is built to order — designed to outlast its first owner.</p>
+      </div>
+      <div>
+        <h4>Collections</h4>
+        <ul>
+          <li><a href="configurator.html">Dining Tables</a></li>
+          <li><a href="configurator.html">Coffee Tables</a></li>
+          <li><a href="configurator.html">Floating Shelves</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="configurator.html">Custom Quote</a></li>
+          <li><a href="b2b-quote.html">B2B Orders</a></li>
+          <li><a href="#">White-Glove Delivery</a></li>
+          <li><a href="#">Nationwide Shipping</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>1600 E 4th St, Austin, TX 78702</p>
+        <p>(512) 555-0174</p>
+        <p>hello@timberandironcraft.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2026 Timber & Iron Craft Co. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ---- State ----
+    var state = {
+      material: 'walnut',
+      materialPrice: 1200,
+      length: 72,
+      base: 'x-frame',
+      basePrice: 400
+    };
+
+    var slabEl = document.getElementById('previewSlab');
+    var priceEl = document.getElementById('priceDisplay');
+    var lengthValEl = document.getElementById('lengthValue');
+    var galleryMatEl = document.getElementById('galleryMaterial');
+    var galleryBaseEl = document.getElementById('galleryBase');
+    var galleryLenEl = document.getElementById('galleryLength');
+
+    var materialNames = {
+      walnut: 'Walnut',
+      'white-oak': 'White Oak',
+      'reclaimed-pine': 'Reclaimed Pine'
+    };
+
+    var baseNames = {
+      'x-frame': 'X-Frame Steel Base',
+      'u-shape': 'U-Shape Steel Base',
+      'pedestal': 'Industrial Pedestal'
+    };
+
+    // ---- Material selection ----
+    document.querySelectorAll('[data-material]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-material]').forEach(function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        state.material = btn.getAttribute('data-material');
+        state.materialPrice = parseInt(btn.getAttribute('data-price'), 10);
+
+        // Update preview
+        slabEl.className = 'preview-slab ' + state.material + ' ' + state.base;
+        galleryMatEl.textContent = materialNames[state.material];
+
+        updatePrice();
+      });
+    });
+
+    // ---- Base selection ----
+    document.querySelectorAll('[data-base]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-base]').forEach(function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        state.base = btn.getAttribute('data-base');
+        state.basePrice = parseInt(btn.getAttribute('data-price'), 10);
+
+        slabEl.className = 'preview-slab ' + state.material + ' ' + state.base;
+        galleryBaseEl.textContent = baseNames[state.base];
+
+        updatePrice();
+      });
+    });
+
+    // ---- Length slider ----
+    var slider = document.getElementById('lengthSlider');
+    slider.addEventListener('input', function () {
+      state.length = parseInt(this.value, 10);
+      lengthValEl.textContent = state.length + '\u2033';
+      galleryLenEl.textContent = state.length + '\u2033';
+      updatePrice();
+    });
+
+    // ---- Price calculation ----
+    function updatePrice() {
+      var baseMatPrice = state.materialPrice;
+
+      var lengthMultiplier = 0.8 + (state.length - 60) / 100;
+      if (lengthMultiplier > 1.4) lengthMultiplier = 1.4;
+
+      var total = Math.round((baseMatPrice + state.basePrice) * lengthMultiplier);
+      priceEl.textContent = '$' + total.toLocaleString();
+    }
+
+    // ---- Submit ----
+    function submitConfig() {
+      var msg = 'Thank you! Your request has been received.\n\n'
+        + 'Material: ' + materialNames[state.material] + '\n'
+        + 'Length: ' + state.length + '\"\n'
+        + 'Base: ' + baseNames[state.base] + '\n'
+        + 'Estimated baseline: ' + priceEl.textContent + '\n\n'
+        + 'We\'ll review your selections and send a formal consultation quote within 48 hours to the email on file.';
+      alert(msg);
+    }
+
+    // Init
+    updatePrice();
+  </script>
+</body>
+</html>

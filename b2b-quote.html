@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>B2B Custom Quote — Timber & Iron Craft Co.</title>
+  <link rel="stylesheet" href="css/timber.css">
+  <style>
+    .b2b-page {
+      padding-top: calc(var(--nav-height) + 48px);
+      padding-bottom: 80px;
+    }
+
+    .b2b-header {
+      margin-bottom: 3rem;
+    }
+
+    .b2b-header h1 {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      margin-bottom: 0.75rem;
+    }
+
+    .b2b-header p {
+      color: var(--muted);
+      max-width: 600px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .b2b-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ===== Form ===== */
+    .quote-form {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--fg);
+    }
+
+    .form-group label .required {
+      color: #c0392b;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--fg);
+      background: var(--bg);
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-group.half {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ===== File Upload ===== */
+    .file-upload-zone {
+      border: 2px dashed var(--border);
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      background: var(--surface);
+      margin-bottom: 24px;
+    }
+
+    .file-upload-zone:hover,
+    .file-upload-zone.dragover {
+      border-color: var(--accent);
+      background: rgba(30, 63, 32, 0.04);
+    }
+
+    .file-upload-zone .upload-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      stroke: var(--muted);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .file-upload-zone.dragover .upload-icon {
+      stroke: var(--accent);
+    }
+
+    .file-upload-zone .upload-text {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .file-upload-zone .upload-text strong {
+      color: var(--accent);
+    }
+
+    .file-upload-zone .upload-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .file-list {
+      list-style: none;
+      margin-top: 12px;
+    }
+
+    .file-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+
+    .file-list li .file-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .file-list li .file-size {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .file-list li .file-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #c0392b;
+      font-size: 1.1rem;
+      line-height: 1;
+      padding: 2px 6px;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    /* ===== B2B Toggle ===== */
+    .b2b-toggle-area {
+      margin-bottom: 24px;
+    }
+
+    .b2b-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+      user-select: none;
+    }
+
+    .b2b-toggle:hover {
+      border-color: var(--accent);
+    }
+
+    .b2b-toggle input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .b2b-toggle .toggle-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .b2b-toggle .toggle-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .b2b-fields {
+      display: none;
+      padding-top: 16px;
+    }
+
+    .b2b-fields.visible {
+      display: block;
+    }
+
+    .submit-row {
+      margin-top: 32px;
+    }
+
+    .submit-row .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* ===== Right info panel ===== */
+    .b2b-info {
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .b2b-info-section {
+      padding: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .b2b-info-section:last-child {
+      border-bottom: none;
+    }
+
+    .b2b-info-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .b2b-info-section p,
+    .b2b-info-section li {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .b2b-info-section ul {
+      list-style: none;
+    }
+
+    .b2b-info-section ul li {
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .b2b-info-section ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 900px) {
+      .b2b-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.half {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <a href="/" class="nav-logo">Timber <span>&amp;</span> Iron</a>
+      <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="configurator.html">Configurator</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="b2b-quote.html" class="active">B2B Quote</a></li>
+        <li><a href="configurator.html" class="nav-cta">Design Your Table</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="b2b-page container">
+    <div class="b2b-header">
+      <h1>Request a Custom Quote</h1>
+      <p>For custom dimensions, commercial-grade finishes, bulk projects, or designs requiring technical review — submit your specifications and we'll respond with a detailed quote within 48 hours.</p>
+    </div>
+
+    <div class="b2b-layout">
+      <!-- Form -->
+      <div class="quote-form">
+        <form id="quoteForm" onsubmit="event.preventDefault(); submitQuote();">
+
+          <div class="form-group">
+            <label>Full name <span class="required">*</span></label>
+            <input type="text" id="fullName" required placeholder="John or Jane Doe">
+          </div>
+
+          <div class="form-group half">
+            <div>
+              <label>Email <span class="required">*</span></label>
+              <input type="email" id="email" required placeholder="jane@studio.com">
+            </div>
+            <div>
+              <label>Phone</label>
+              <input type="tel" id="phone" placeholder="(512) 555-0142">
+            </div>
+          </div>
+
+          <!-- B2B Toggle -->
+          <div class="b2b-toggle-area">
+            <label class="b2b-toggle">
+              <input type="checkbox" id="b2bToggle" onchange="toggleB2b()">
+              <div>
+                <div class="toggle-label">Are you an interior designer or commercial builder?</div>
+                <div class="toggle-sub">Check to reveal business account fields.</div>
+              </div>
+            </label>
+            <div class="b2b-fields" id="b2bFields">
+              <div class="form-group">
+                <label>Company name <span class="required">*</span></label>
+                <input type="text" id="companyName" placeholder="Studio Name / LLC">
+              </div>
+              <div class="form-group">
+                <label>Tax ID / EIN</label>
+                <input type="text" id="taxId" placeholder="XX-XXXXXXX">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Project description <span class="required">*</span></label>
+            <textarea id="description" required placeholder="Tell us about your project — dimensions, quantity, wood preference, finish requirements, delivery location, timeline…"></textarea>
+          </div>
+
+          <!-- File Upload -->
+          <label>Attach design files (PDF, CAD, sketches) <span class="required">*</span></label>
+          <div class="file-upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <svg class="upload-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <div class="upload-text">Drop files here, or <strong>browse</strong></div>
+            <div class="upload-hint">Supports PDF, AI, CAD, PNG, JPG — up to 25 MB per file</div>
+          </div>
+          <input type="file" id="fileInput" multiple accept=".pdf,.ai,.dwg,.dxf,.png,.jpg,.jpeg" onchange="handleFiles(this.files)">
+          <ul class="file-list" id="fileList"></ul>
+
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary">Submit Quote Request</button>
+          </div>
+          <p style="font-size:0.8rem;color:var(--muted);text-align:center;margin-top:12px;">Your submitted specs and files go directly to our workshop team for review.</p>
+        </form>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="b2b-info">
+        <div class="b2b-info-section">
+          <h3>What happens next</h3>
+          <ul>
+            <li>Your specs are reviewed by our lead fabricator within 48 hours</li>
+            <li>You receive a detailed line-item quote with material costs, lead time, and shipping options</li>
+            <li>Progress photos and CAD confirmations shared throughout production</li>
+            <li>White-glove delivery and installation available within 150 miles of Austin</li>
+          </ul>
+        </div>
+        <div class="b2b-info-section">
+          <h3>Commercial-grade finishes</h3>
+          <p>We offer commercial-grade sealants, fire-rated materials, high-traffic finishes, and custom stain matching for hospitality, retail, and office environments. Specify requirements in your project description.</p>
+        </div>
+        <div class="b2b-info-section">
+          <h3>Accepted file formats</h3>
+          <p>PDF, AI, DWG, DXF, PNG, JPG — up to 25 MB per file. Need to send larger blueprints or a full spec package? Email us directly at <strong style="color:var(--fg);">b2b@timberandironcraft.com</strong> with your project name in the subject line.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div>
+        <div class="footer-brand">Timber <span>&amp;</span> Iron</div>
+        <p>Custom hardwood and steel furniture handcrafted in Austin, Texas. Every piece is built to order — designed to outlast its first owner.</p>
+      </div>
+      <div>
+        <h4>Collections</h4>
+        <ul>
+          <li><a href="configurator.html">Dining Tables</a></li>
+          <li><a href="configurator.html">Coffee Tables</a></li>
+          <li><a href="configurator.html">Floating Shelves</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="configurator.html">Custom Quote</a></li>
+          <li><a href="b2b-quote.html">B2B Orders</a></li>
+          <li><a href="#">White-Glove Delivery</a></li>
+          <li><a href="#">Nationwide Shipping</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>1600 E 4th St, Austin, TX 78702</p>
+        <p>(512) 555-0174</p>
+        <p>hello@timberandironcraft.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2026 Timber & Iron Craft Co. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    var uploadedFiles = [];
+
+    function toggleB2b() {
+      var checked = document.getElementById('b2bToggle').checked;
+      var fields = document.getElementById('b2bFields');
+      fields.classList.toggle('visible', checked);
+    }
+
+    function handleFiles(files) {
+      for (var i = 0; i < files.length; i++) {
+        var f = files[i];
+        if (f.size > 25 * 1024 * 1024) {
+          alert('"' + f.name + '" exceeds the 25 MB limit and was not added.');
+          continue;
+        }
+        uploadedFiles.push(f);
+      }
+      renderFileList();
+    }
+
+    function renderFileList() {
+      var list = document.getElementById('fileList');
+      list.innerHTML = '';
+      uploadedFiles.forEach(function (f, i) {
+        var li = document.createElement('li');
+        var size = (f.size / 1024 / 1024).toFixed(1) + ' MB';
+        li.innerHTML = '<span class="file-name"><span>' + f.name + '</span><span class="file-size">' + size + '</span></span>'
+          + '<button class="file-remove" onclick="removeFile(' + i + ')" aria-label="Remove file">&times;</button>';
+        list.appendChild(li);
+      });
+    }
+
+    function removeFile(index) {
+      uploadedFiles.splice(index, 1);
+      renderFileList();
+    }
+
+    function submitQuote() {
+      var name = document.getElementById('fullName').value.trim();
+      var email = document.getElementById('email').value.trim();
+      var desc = document.getElementById('description').value.trim();
+
+      if (!name || !email || !desc) {
+        alert('Please fill in all required fields (name, email, and project description).');
+        return;
+      }
+
+      if (uploadedFiles.length === 0) {
+        alert('Please attach at least one design file (PDF, CAD, sketch, etc.).');
+        return;
+      }
+
+      var msg = 'Quote request submitted!\n\n'
+        + 'Name: ' + name + '\n'
+        + 'Email: ' + email + '\n';
+
+      var isB2b = document.getElementById('b2bToggle').checked;
+      if (isB2b) {
+        var company = document.getElementById('companyName').value.trim();
+        var taxId = document.getElementById('taxId').value.trim();
+        if (company) msg += 'Company: ' + company + '\n';
+        if (taxId) msg += 'Tax ID: ' + taxId + '\n';
+      }
+
+      msg += 'Files attached: ' + uploadedFiles.length + '\n\n'
+        + 'Our workshop team will review your request and respond within 48 hours.';
+
+      alert(msg);
+    }
+
+    // Drag-and-drop support
+    var zone = document.getElementById('uploadZone');
+    zone.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', function () {
+      zone.classList.remove('dragover');
+    });
+    zone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) {
+        handleFiles(e.dataTransfer.files);
+      }
+    });
+  </script>
+</body>
+</html>
